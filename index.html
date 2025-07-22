@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"> 
+    <link rel="stylesheet" href="thanaia.css">
+    <title>Document</title>
+</head>
+<body>
+    
+    <div class="container">
+    
+
+
+
+        <form> 
+               <h1>ادخل الاسم</h1>
+            <input type="text"  id="setNumber"> 
+            <button>استعلام</button>
+        </form>
+
+
+        <div id="results"></div>
+
+
+    </div>
+
+
+    <!-- <script  src="thanaia.js" ></script> -->
+
+        <script>
+        let form = document.querySelector("form");
+        let input = document.querySelector("form input");
+        let button = document.querySelector("form button");
+        let resultsDiv = document.querySelector("#results");
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+
+            fetch("http://localhost:8080/getNumber/post", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    name: input.value.trim()
+                })
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log("Response:", data);
+                displayResults(data);
+            })
+            .catch(err => {
+                console.error("Error:", err);
+                resultsDiv.innerHTML = "<p>حدث خطأ أثناء جلب البيانات</p>";
+            });
+        });
+
+        function displayResults(data) {
+            if (data.length === 0) {
+                resultsDiv.innerHTML = "<p>لا توجد نتائج مطابقة</p>";
+                return;
+            }
+
+            let table = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>رقم الجلوس</th>
+                            <th>الاسم</th>
+                            <th>الدرجة الكلية</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            data.forEach(row => {
+                table += `
+                    <tr>
+                        <td>${row.seating_no || ''}</td>
+                        <td>${row.Column1 || ''}</td>
+                        <td>${row.total_degree || ''}</td>
+                    </tr>
+                `;
+            });
+
+            table += `
+                    </tbody>
+                </table>
+            `;
+
+            resultsDiv.innerHTML = table;
+        }
+    </script>
+
+</body>
+</html>
