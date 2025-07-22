@@ -62,6 +62,13 @@ form button {
     padding: 10px 30px;
 } 
 
+#results{
+    
+    height: 50vh; 
+    overflow: scroll;
+
+}
+
 
 table {
             width: 100%;
