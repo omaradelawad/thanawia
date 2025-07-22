@@ -63,10 +63,8 @@ form button {
 } 
 
 #results{
-    
     height: 50vh; 
     overflow: scroll;
-
 }
 
 
